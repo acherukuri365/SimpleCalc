@@ -71,17 +71,20 @@ public class SimpleCalc {
 		
 		for(int i = 0; i < tokens.size(); i++) {
 			String token = tokens.get(i);
+			String operator = "";
+			if(!operatorStack.isEmpty()) operator = operatorStack.peek();
+			
 			switch(token) {
 				case "+":
-					operatorStack.push(token);
-					break;
 				case "-":
-					operatorStack.push(token);
-					break;
 				case "*":
-					operatorStack.push(token);
-					break;
 				case "/":
+				case "%":
+				case "(":
+				case ")":
+					if(hasPrecedence(token, operator))
+						valueStack.push(doMath());
+					
 					operatorStack.push(token);
 					break;
 				default:
@@ -90,27 +93,49 @@ public class SimpleCalc {
 			}
 		}
 		
+		value += doMath();
+		
+		return value;
+	}
+	
+	/**
+	 * 	Computes answer using both stacks
+	 * 	@return		answer to operation
+	 */
+	public double doMath() {
+		int value = 0;
 		while(!valueStack.isEmpty()) {
 			double num1 = valueStack.pop();
+			//~ System.out.println("num1 = " + num1);
 			if(!valueStack.isEmpty()) {
 				double num2 = valueStack.pop();
+				//~ System.out.println("num2 = " + num2);
 				String operator = operatorStack.pop();
+				//~ System.out.println("operator = " + operator);
 				
 				switch(operator) {
 					case "+":
 						value += num2 + num1;
+						valueStack.push(num2 + num1);
 						break;
 					case "-":
 						value += num2 - num1;
+						valueStack.push(num2 - num1);
 						break;
 					case "*":
 						value += num2 * num1;
+						valueStack.push(num2 * num1);
 						break;
 					case "/":
 						value += num2 / num1;
+						valueStack.push(num2 / num1);
+						break;
+					case "%":
+						value += num2 % num1;
+						valueStack.push(num2 % num1);
 						break;
 				}
-			}
+			} else return num1;
 		}
 		
 		return value;
