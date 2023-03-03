@@ -80,6 +80,7 @@ public class SimpleCalc {
 				case "*":
 				case "/":
 				case "%":
+				case "^":
 				case "(":
 				case ")":
 					if(hasPrecedence(token, operator))
@@ -134,6 +135,8 @@ public class SimpleCalc {
 						value += num2 % num1;
 						valueStack.push(num2 % num1);
 						break;
+					case "^":
+						value += Math.pow(num2, num1);
 				}
 			} else return num1;
 		}
