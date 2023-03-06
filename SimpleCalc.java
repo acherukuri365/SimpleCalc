@@ -75,14 +75,16 @@ public class SimpleCalc {
 			if(!operatorStack.isEmpty()) operator = operatorStack.peek();
 			
 			switch(token) {
+				case "(":
+				case ")":
+					valueStack.push(doMath());
+					break;
 				case "+":
 				case "-":
 				case "*":
 				case "/":
 				case "%":
 				case "^":
-				case "(":
-				case ")":
 					if(hasPrecedence(token, operator))
 						valueStack.push(doMath());
 					
@@ -104,7 +106,7 @@ public class SimpleCalc {
 	 * 	@return		answer to operation
 	 */
 	public double doMath() {
-		int value = 0;
+		double value = 0;
 		while(!valueStack.isEmpty()) {
 			double num1 = valueStack.pop();
 			//~ System.out.println("num1 = " + num1);
